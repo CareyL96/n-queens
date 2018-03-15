@@ -15,25 +15,64 @@
 
 
 
-window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+window.findNRooksSolution = function(n, board, rowIdx, rooksPlaced) {
+  var solution;
+  board = board || new Board({n: n});
+  rowIdx = rowIdx || 0;
+  rooksPlaced = rooksPlaced || 0;
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  if (rowIdx === n && rooksPlaced === n) {
+    solution = board.rows();
+    console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+    return solution;
+  }
+
+  if (solution === undefined) {
+    for (var colIdx = 0; colIdx < n; colIdx++) {
+      board.togglePiece(rowIdx, colIdx);
+      rooksPlaced++
+      if (!(board.hasAnyRooksConflicts())) {
+        solution = window.findNRooksSolution(n, board, rowIdx + 1, rooksPlaced);
+      } else {
+        board.togglePiece(rowIdx, colIdx);
+        rooksPlaced--;
+      }
+    }
+  }
+
   return solution;
+// base case
+  // if iterated over every row and solution is valid
+    // set solution to the board
+    // return board
+
+// recursive case
+  // if haven't iterated through all rows
+    // iterate over each column
+    // place a rook on [row, col]
+    // if rook has no conflicts
+      // set solution to recursive function 
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+window.countNRooksSolutions = function(n, board, rowIdx) {
+  var solutionCount;
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  // 
+  if (rowIdx === n) {
+
+  }
   return solutionCount;
 };
+  
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution; //fixme
+  var board = new Board({n: n});
 
+
+  solution = board.rows();
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };
